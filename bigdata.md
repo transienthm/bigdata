@@ -85,3 +85,66 @@ HDFS Client请求NameNode
 
 ### 1.2.5 HDFS的安装
 
+- 配置NameNode
+
+  `conf/core-site.xml`
+
+  ```xml
+  <configuration>
+       <property>
+           <name>fs.default.name</name>
+           <value>hdfs://localhost:9000</value>
+       </property>
+  </configuration>
+  ```
+
+- 配置备份数
+
+  `conf/hdfs-site.xml`
+
+  ```xml
+  <configuration>
+       <property>
+           <name>dfs.replication</name>
+           <value>1</value>
+       </property>
+  </configuration>
+  ```
+
+  
+
+- 配置DataNode
+
+  `vim slaves` ，添加上node信息
+
+- 配置SecondNameNode
+
+  `vim masters`，添加上node信息
+
+- 配置免密码登陆
+
+  `cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys`
+
+## 1.3 MapReduce
+
+### 1.3.1 基本信息
+
+MapReduce更适合做离线计算
+
+Storm流式计算框架，更适合做实时计算
+
+Spark更适合做快速得到计算结果的计算
+
+![image](https://user-images.githubusercontent.com/16509581/43558099-4ed21a6e-963a-11e8-9fe9-c2e198592b29.png)
+
+### 1.3.2 计算框架
+
+![image-20180802095717381](/var/folders/dq/bwscczgs1m10n6c_4b1hg3m40000gp/T/abnerworks.Typora/image-20180802095717381.png)
+
+四个步骤：splitting、mapping、shuffling、reducing
+
+![image](https://user-images.githubusercontent.com/16509581/43558753-a504db1c-963d-11e8-94b9-9867e18ec287.png)
+
+1. 从HDFS中得到数据输入，将其变成split
+2. 每个split都有一个map线程执行数据处理
+3. 
