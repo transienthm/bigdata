@@ -145,6 +145,25 @@ Spark更适合做快速得到计算结果的计算
 
 ![image](https://user-images.githubusercontent.com/16509581/43558753-a504db1c-963d-11e8-94b9-9867e18ec287.png)
 
+以统计大数据中单词出现的次数这个需求为例
+
 1. 从HDFS中得到数据输入，将其变成split
 2. 每个split都有一个map线程执行数据处理
-3. 
+3. 将split后的结果进行mapping操作，以单词为键，值为1
+4. shuffling进行按类别合并，键值不改变
+5. 在reducing过程中进行值的合并，同样的键，值相加
+6. 得到最后的结果
+
+### 1.3.3 shuffler
+
+shuffler的过程主要由hadoop框架来完成，重写代码只能改变其一部分行为
+
+![image](https://user-images.githubusercontent.com/16509581/43589672-c94e0afc-96a1-11e8-9fa1-24712973b123.png)
+
+![image](https://user-images.githubusercontent.com/16509581/43589987-7c992efc-96a2-11e8-9508-548d31c5687f.png)
+
+map的结果加载到内存中，到一定程度后会逆写到磁盘上。两个过程之间要经过：partition、sort、spill等操作
+
+mapreduce通过shuffler来解决数据倾斜问题
+
+按partition分区的结果来传递给reduce
